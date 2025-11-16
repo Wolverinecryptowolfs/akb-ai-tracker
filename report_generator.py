@@ -10,7 +10,7 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 if GEMINI_API_KEY:
     client = OpenAI(
         api_key=GEMINI_API_KEY,
-        base_url="https://api.gemini.com/v1" # Placeholder, will be corrected to the actual Gemini API base URL
+        base_url="https://api.gemini.com/v1/models" # Corrected base URL for Gemini API
     )
 else:
     # Fallback to OpenAI if GEMINI_API_KEY is not set, but this will likely fail due to the previous 401 error
