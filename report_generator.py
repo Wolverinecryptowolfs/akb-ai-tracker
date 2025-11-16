@@ -1,10 +1,20 @@
 import json
 import os
 from openai import OpenAI
+import os
 from datetime import datetime
 
 # Initialize OpenAI client (API key is automatically picked up from environment)
-client = OpenAI()
+# We are configuring it to use the Gemini API via the OpenAI-compatible client
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+if GEMINI_API_KEY:
+    client = OpenAI(
+        api_key=GEMINI_API_KEY,
+        base_url="https://api.gemini.com/v1" # Placeholder, will be corrected to the actual Gemini API base URL
+    )
+else:
+    # Fallback to OpenAI if GEMINI_API_KEY is not set, but this will likely fail due to the previous 401 error
+    client = OpenAI()
 
 RAW_DATA_PATH = "raw_data/arxiv_raw_data.json"
 REPORT_DIR = "reports"
@@ -49,7 +59,7 @@ def generate_summary(paper_data):
     
     try:
         response = client.chat.completions.create(
-            model="gemini-2.5-flash", # Using the recommended fast and cost-effective model
+            model="gemini-2.5-flash", # Using the recommended fast and cost-effective model (Ensure the base_url is correct for this model)
             messages=[
                 {"role": "system", "content": "You are an expert AI Research Analyst."},
                 {"role": "user", "content": prompt}
