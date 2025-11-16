@@ -12,7 +12,7 @@ from datetime import datetime
 
 PAYWEN_API_URL = "https://api.paywen.dev/v1/paywalls"
 REPORT_DIR = "reports"
-REPORT_BASE_URL = "https://your-public-hosting-service.com/reports/" # Placeholder for user's public URL
+REPORT_BASE_URL = os.environ.get("AKB_BASE_URL", "https://your-public-hosting-service.com/reports/")
 
 def create_paywall(report_filename, price=2.99, currency="USDC"):
     """
@@ -72,9 +72,8 @@ def main(report_filename):
     # This is a placeholder for testing the function independently
     # In the final script, this will be called by the main automation script.
     
-    # NOTE: The user MUST replace REPORT_BASE_URL with their actual public hosting service.
     if REPORT_BASE_URL == "https://your-public-hosting-service.com/reports/":
-        print("CRITICAL ERROR: Please update 'REPORT_BASE_URL' in paywen_integrator.py with your actual public hosting service URL.")
+        print("CRITICAL ERROR: The AKB_BASE_URL environment variable is not set. Please set it to your GitHub Pages URL.")
         return
 
     paywall_link = create_paywall(report_filename)

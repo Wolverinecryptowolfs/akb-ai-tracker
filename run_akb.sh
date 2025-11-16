@@ -36,7 +36,7 @@ echo "--------------------------------------------------------------------------
 echo "The report has been successfully generated at: ${REPORT_PATH}"
 echo "Before proceeding with monetization, you MUST perform the following steps:"
 echo "1. **UPLOAD:** Upload the file ${REPORT_PATH} to your public hosting service (e.g., S3, IPFS, GitHub Pages)."
-echo "2. **CONFIGURE:** Ensure the 'REPORT_BASE_URL' in '${INTEGRATOR_SCRIPT}' is correctly set to your hosting service's base URL."
+echo# 2. **CONFIGURE:** Ensure the AKB_BASE_URL environment variable is set to your GitHub Pages URL."
 echo "3. **RUN INTEGRATOR:** After uploading and configuring, run the Paywen integration script manually:"
 echo "   python3 ${INTEGRATOR_SCRIPT} ${REPORT_FILENAME}"
 echo "--------------------------------------------------------------------------------"

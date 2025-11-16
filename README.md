@@ -26,6 +26,8 @@ Der Code ist so konfiguriert, dass er die Basis-URL über eine **Umgebungsvariab
 export AKB_BASE_URL="https://wolverinecryptowolfs.github.io/akb-ai-tracker/"
 ```
 
+**Wichtig:** Achten Sie darauf, dass die URL mit einem Schrägstrich (`/`) endet.
+
 ### 3. Tägliche Ausführung
 
 Führen Sie den AKB in zwei einfachen Schritten aus:
