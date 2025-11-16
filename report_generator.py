@@ -1,20 +1,16 @@
 import json
 import os
-from openai import OpenAI
+from google import genai
 import os
 from datetime import datetime
 
-# Initialize OpenAI client (API key is automatically picked up from environment)
-# We are configuring it to use the Gemini API via the OpenAI-compatible client
+# Initialize Gemini client
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 if GEMINI_API_KEY:
-    client = OpenAI(
-        api_key=GEMINI_API_KEY,
-        base_url="https://api.gemini.com/v1/models" # Corrected base URL for Gemini API
-    )
+    client = genai.Client(api_key=GEMINI_API_KEY)
 else:
-    # Fallback to OpenAI if GEMINI_API_KEY is not set, but this will likely fail due to the previous 401 error
-    client = OpenAI()
+    print("CRITICAL ERROR: GEMINI_API_KEY environment variable not set.")
+    client = None
 
 RAW_DATA_PATH = "raw_data/arxiv_raw_data.json"
 REPORT_DIR = "reports"
@@ -57,16 +53,21 @@ def generate_summary(paper_data):
     Since we only have the title and URL, you must use your general knowledge to infer the content and provide a high-quality, speculative summary based on the title and the context of recent AI research. Focus on the potential impact and novelty.
     """
     
+    if not client:
+        return f"Summary generation failed: GEMINI_API_KEY not set."
+
     try:
-        response = client.chat.completions.create(
-            model="gemini-2.5-flash", # Using the recommended fast and cost-effective model (Ensure the base_url is correct for this model)
-            messages=[
-                {"role": "system", "content": "You are an expert AI Research Analyst."},
-                {"role": "user", "content": prompt}
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=[
+                {"role": "user", "parts": [{"text": prompt}]}
             ],
-            temperature=0.3
+            config=genai.types.GenerateContentConfig(
+                system_instruction="You are an expert AI Research Analyst.",
+                temperature=0.3
+            )
         )
-        return response.choices[0].message.content.strip()
+        return response.text.strip()
     except Exception as e:
         print(f"Error generating summary for '{title}': {e}")
         return f"Summary generation failed due to an API error: {e}"
